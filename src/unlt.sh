@@ -39,11 +39,11 @@ RETURN_KEY="R"
 YES_KEY="Y"
 NO_KEY="N"
 
+PLATFORM_TOOLS_VER="r14"
 PLATFORM_TOOLS_DIR="$PWD/platform-tools"
-PLATFORM_TOOLS_TGZ="$PLATFORM_TOOLS_DIR/platformtools.tgz"
-
-PLATFORM_TOOLS_URL="http://galaxy-nexus-linux-toolkit.googlecode.com/files/platformtools.tgz"
-PLATFORM_TOOLS_MD5="0cb8d5852087b6bfbd85e0f5fced9332"
+PLATFORM_TOOLS_ZIP="$PLATFORM_TOOLS_DIR/platform-tools_$PLATFORM_TOOLS_VER-linux.zip"
+PLATFORM_TOOLS_URL="https://dl-ssl.google.com/android/repository/platform-tools_$PLATFORM_TOOLS_VER-linux.zip"
+PLATFORM_TOOLS_SHA256="502602cf5af50f6cbaa9d034e00db513e31e2c27a0d729dafb35c6eee9ee2926"
 
 CRESPO_NAME="Nexus S (worldwide version, i9020t and i9023) [crespo]"
 CRESPO_ID=1
@@ -311,13 +311,13 @@ downloadPlatformTools () {
     echo "Downloading Platform Tools..."
     mkdir $PLATFORM_TOOLS_DIR
     cd $PLATFORM_TOOLS_DIR
-    wget $PLATFORM_TOOLS_URL
+    wget -c $PLATFORM_TOOLS_URL
   fi
 }
 
 checkPlatformTools () {
   cd $PLATFORM_TOOLS_DIR
-  if [ -e $PLATFORM_TOOLS_TGZ ] && [ $PLATFORM_TOOLS_MD5 != "`md5sum $PLATFORM_TOOLS_TGZ | head -c 32`" ];
+  if [ -e $PLATFORM_TOOLS_ZIP ] && [ $PLATFORM_TOOLS_SHA256 != "`sha256sum $PLATFORM_TOOLS_ZIP | head -c 64`" ];
   then
     ERROR=$TRUE
     echo "ERROR: Platform Tools are corrupted. Erasing..."
@@ -329,10 +329,10 @@ checkPlatformTools () {
 
 extractPlatformTools () {
   cd $PLATFORM_TOOLS_DIR
-  if [ -e $PLATFORM_TOOLS_TGZ ];
+  if [ -e $PLATFORM_TOOLS_ZIP ];
   then
-    tar -xzf $PLATFORM_TOOLS_TGZ
-    rm $PLATFORM_TOOLS_TGZ
+    unzip -d ../ $PLATFORM_TOOLS_ZIP
+    rm $PLATFORM_TOOLS_ZIP
   fi
 }
 
